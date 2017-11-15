@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Teches on Hao Ruan</title>
-    <link>https://ruanhao.github.io/tech/</link>
-    <description>Recent content in Teches on Hao Ruan</description>
+    <title>Linux on Hao Ruan</title>
+    <link>https://ruanhao.github.io/categories/linux/</link>
+    <description>Recent content in Linux on Hao Ruan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&amp;copy; Copyright Hao Ruan</copyright>
     <lastBuildDate>Wed, 14 Sep 2016 17:46:19 +0800</lastBuildDate>
     
-	<atom:link href="https://ruanhao.github.io/tech/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ruanhao.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

@@ -7,18 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&amp;copy; Copyright Hao Ruan</copyright>
-    <lastBuildDate>Tue, 14 Nov 2017 17:46:19 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Sep 2016 17:46:19 +0800</lastBuildDate>
     
 	<atom:link href="https://ruanhao.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Helloworld</title>
-      <link>https://ruanhao.github.io/tech/helloworld/</link>
-      <pubDate>Tue, 14 Nov 2017 17:46:19 +0800</pubDate>
+      <title>SSH Reverse Tunnel（反向通道）</title>
+      <link>https://ruanhao.github.io/tech/linux/ssh/</link>
+      <pubDate>Wed, 14 Sep 2016 17:46:19 +0800</pubDate>
       
-      <guid>https://ruanhao.github.io/tech/helloworld/</guid>
-      <description> Just say hello </description>
+      <guid>https://ruanhao.github.io/tech/linux/ssh/</guid>
+      <description>基本原理 端口转发是一项很有用的技术，经常会用在开发，调试阶段，合理的运用这个技术能有效地提高工作效率，做出一些很巧妙的设计。
+SSH 对于大多数开发者来说并不陌生，也是登录一台主机的主要手段，但 SSH 也是可以用于实现端口转发功能的。
+这里不打算介绍使用 SSH 实现本地端口转发，因为用 SSH 来做这个事情显得有些怪异，命令写出来也很不直观。 可以用 Nginx ，iptables 实现相同的功能，也可以使用 netcat 或者 socat 来快速搭建一条转发通道以便调试， 比如想要实现本地 8080 到 80 的端口转发：
+socat tcp-l:localhost:8080 tcp:localhost:80  使用 SSH 可以对转发的内容进行加密的话，也可以尝试下 socat 的 openssl-connect 命令。
+相比本地端口转发，基于 SSH 的反向通道转发功能（Reverse Tunnel / Call Home Tunnel）用得比较少，原理也不是很直观， 我第一次接触 -R 这个选项完全不明白这是用来干嘛的，但其实这个功能很有用。
+如上图所示，主机 A 位于实验室的局域网内，通过路由器访问广域网，工作站位于广域网中。 若想让工作站访问主机 A ，通过本地端口转发的方式显然不行，因为工作站无法通过内网地址（192.168.1.3）找到局域网内的主机。
+这时就可以使用 SSH Reverse Tunnel 功能了，由内网的主机发起，与外网的工作站建立 TCP 连接，之后所有的转发内容就能够走在这条 TCP 连接上了。 因为转发通道是由目的端主机发起建立的，所以是 Reverse。
+用法介绍 ssh -N -f -R 8888:localhost:22 &amp;lt;user-of-workstation&amp;gt;@128.</description>
     </item>
     
   </channel>
