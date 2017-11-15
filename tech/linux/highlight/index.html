@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta property="og:title" content=" 在终端下分析日志文件 &middot;  Hao Ruan" />
+  
+  <meta name="theme-color" content="#333" />
+ 
+  <meta property="og:site_name" content="Hao Ruan" />
+  <meta property="og:url" content="https://ruanhao.github.io/tech/linux/highlight/" />
+  
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:article:author" content="https://facebook.com/ruanhao1116" />
+  
+  <meta property="og:article:published_time" content="2017-08-06T19:59:36&#43;08:00" />
+  
+  
+  <meta name="og:description" content="常用方法 在桌面环境下，分析日志文件一般使用 TextEdit ，Sublime 等文本编辑工具，当需要查找特定的关键词时，Ctrl-F 或者 Command-F 即可。 但还是有很多内容需要用肉眼过滤，很容易看花眼。
+在 Linux 上进行开发的话，会使用 grep 过滤出感兴趣的内容。比如：
+ 过滤某个关键词:
+grep -i &#39;keyword&#39; xxx.log  过滤多个关键词:
+grep &#39;kw1\|kw2&#39; xxx.log  反向过滤:
+grep -v &#39;nokw&#39; xxx.log  将空行过滤掉:
+grep . xxx.log   grep 功能很强，也是我最喜欢的命令之一。尽可能使用高亮模式 grep --color=auto，提升视觉享受。
+问题所在 很多时候分析日志文件时，需要查找某一行同时出现多个关键词， 比如需要找出等级为 INFO ，且同时出现 &ldquo;exception&rdquo; 关键词的日志， 一般情况下会将命令写成这样：
+grep &#39;INFO&#39; xxx.log | grep &#39;exception&#39;  但这样关键词多起来，就要写很多管道了，看上去也不直观。
+解决方法 可以 source 这个脚本，将命令写成：
+m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多个关键词了，不过如果还能高亮那就再好不过了：" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:url" content="https://ruanhao.github.io/tech/linux/highlight/" />
+  <meta name="twitter:site" content="@" />
+  <meta name="twitter:creator" content="@" />
+
+  <title>
+     在终端下分析日志文件 &middot;  Hao Ruan
+  </title>
+
+  <link rel="stylesheet" href="https://ruanhao.github.io/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://ruanhao.github.io/css/main.css" />
+  <link rel="stylesheet" href="https://ruanhao.github.io/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://ruanhao.github.io/css/github.css" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" type="text/css">
+  <link rel="stylesheet" href="https://ruanhao.github.io//style.css">
+  <link rel="shortcut icon" href="https://ruanhao.github.io/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://ruanhao.github.io/images/apple-touch-icon.png" />
+  
+</head>
+<body>
+    <header class="global-header"  style="background-image:url( /images/bg.png )">
+    <section class="header-text">
+      <h1><a href="https://ruanhao.github.io/">Hao Ruan</a></h1>
+      
+      <div class="tag-line">
+        用简单的文字记录生活与技术
+      </div>
+      
+      
+      <a href="https://ruanhao.github.io/" class="btn-header btn-back hidden-xs">
+        <i class="fa fa-angle-left" aria-hidden="true"></i>
+        &nbsp;Home
+      </a>
+      
+      
+    </section>
+  </header>
+  <main class="container">
+
+
+<article>
+  <header>
+    <h1 class="text-primary">在终端下分析日志文件</h1>
+    <div class="post-meta clearfix">
+      <div class="post-date pull-left">
+        Posted on
+        <time datetime="2017-08-06T19:59:36&#43;08:00">
+          Aug 6, 2017
+        </time>
+      </div>
+      <div class="pull-right">
+        
+      </div>
+    </div>
+  </header>
+  <section>
+    
+
+<h2 id="常用方法">常用方法</h2>
+
+<p>在桌面环境下，分析日志文件一般使用 TextEdit ，Sublime 等文本编辑工具，当需要查找特定的关键词时，Ctrl-F 或者 Command-F 即可。
+但还是有很多内容需要用肉眼过滤，很容易看花眼。</p>
+
+<p>在 Linux 上进行开发的话，会使用 grep 过滤出感兴趣的内容。比如：</p>
+
+<ul>
+<li><p>过滤某个关键词:</p>
+
+<pre><code class="language-sh">grep -i 'keyword' xxx.log
+</code></pre></li>
+
+<li><p>过滤多个关键词:</p>
+
+<pre><code class="language-sh">grep 'kw1\|kw2' xxx.log
+</code></pre></li>
+
+<li><p>反向过滤:</p>
+
+<pre><code class="language-sh">grep -v 'nokw' xxx.log
+</code></pre></li>
+
+<li><p>将空行过滤掉:</p>
+
+<pre><code class="language-sh">grep . xxx.log
+</code></pre></li>
+</ul>
+
+<p>grep 功能很强，也是我最喜欢的命令之一。尽可能使用高亮模式 <code>grep --color=auto</code>，提升视觉享受。</p>
+
+<h2 id="问题所在">问题所在</h2>
+
+<p>很多时候分析日志文件时，需要查找某一行同时出现多个关键词，
+比如需要找出等级为 INFO ，且同时出现 &ldquo;exception&rdquo; 关键词的日志，
+一般情况下会将命令写成这样：</p>
+
+<pre><code class="language-sh">grep 'INFO' xxx.log | grep 'exception'
+</code></pre>
+
+<p>但这样关键词多起来，就要写很多管道了，看上去也不直观。</p>
+
+<h2 id="解决方法">解决方法</h2>
+
+<p>可以 source <a href="https://gist.github.com/ruanhao/e94d426f715dcc22e1405b8462685354">这个脚本</a>，将命令写成：</p>
+
+<pre><code class="language-sh">m -p 'INFO' -p 'exception' xxx.log
+</code></pre>
+
+<p>这样就能同时搜索多个关键词了，不过如果还能高亮那就再好不过了：</p>
+
+<pre><code class="language-sh">m -p 'INFO' -p 'exception' xxx.log | h 'INFO' 'exception'
+</code></pre>
+
+<p>效果如下：</p>
+
+<p><img src="/images/tech/browse-log-under-term.png" alt="" /></p>
+
+<p>其实在终端下分析日志还是很开心的。</p>
+
+  </section>
+  <footer>
+    
+    <hr/>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'ruanhao';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+    <section class="author-info row">
+      <div class="author-avatar col-md-2">
+        
+        <img alt="Author Avatar" src="/images/avatar.jpg" />
+        
+      </div>
+      <div class="author-meta col-md-6">
+        
+        <h1 class="author-name text-primary">Hao Ruan</h1>
+        
+        
+        <div class="author-bio">software engineer @ Shanghai</div>
+        
+      </div>
+      
+    </section>
+    <ul class="pager">
+      
+      <li class="previous"><a href="https://ruanhao.github.io/tech/linux/ssh/"><span aria-hidden="true">&larr;</span> Older</a></li>
+      
+      
+      <li class="next disabled"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+  </main>
+  <footer class="container global-footer">
+    <div class="copyright-note pull-left">
+      &copy; Copyright Hao Ruan
+    </div>
+    <div class="sns-links hidden-print">
+  
+  
+  
+  
+  
+  <a href="https://facebook.com/ruanhao1116" target="_blank">
+    <i class="fa fa-facebook"></i>
+  </a>
+  
+  
+  <a href="https://github.com/ruanhao" target="_blank">
+    <i class="fa fa-github"></i>
+  </a>
+  
+  
+  
+  <a href="https://linkedin.com/in/ruanhao1116" target="_blank">
+    <i class="fa fa-linkedin"></i>
+  </a>
+  
+  
+</div>
+
+  </footer>
+
+  <script src="https://ruanhao.github.io/js/highlight.pack.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-109678845-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+  
+</body>
+</html>
+

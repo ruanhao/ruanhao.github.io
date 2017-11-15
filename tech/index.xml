@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&amp;copy; Copyright Hao Ruan</copyright>
-    <lastBuildDate>Wed, 14 Sep 2016 17:46:19 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 06 Aug 2017 19:59:36 +0800</lastBuildDate>
     
 	<atom:link href="https://ruanhao.github.io/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>在终端下分析日志文件</title>
+      <link>https://ruanhao.github.io/tech/linux/highlight/</link>
+      <pubDate>Sun, 06 Aug 2017 19:59:36 +0800</pubDate>
+      
+      <guid>https://ruanhao.github.io/tech/linux/highlight/</guid>
+      <description>常用方法 在桌面环境下，分析日志文件一般使用 TextEdit ，Sublime 等文本编辑工具，当需要查找特定的关键词时，Ctrl-F 或者 Command-F 即可。 但还是有很多内容需要用肉眼过滤，很容易看花眼。
+在 Linux 上进行开发的话，会使用 grep 过滤出感兴趣的内容。比如：
+ 过滤某个关键词:
+grep -i &#39;keyword&#39; xxx.log  过滤多个关键词:
+grep &#39;kw1\|kw2&#39; xxx.log  反向过滤:
+grep -v &#39;nokw&#39; xxx.log  将空行过滤掉:
+grep . xxx.log   grep 功能很强，也是我最喜欢的命令之一。尽可能使用高亮模式 grep --color=auto，提升视觉享受。
+问题所在 很多时候分析日志文件时，需要查找某一行同时出现多个关键词， 比如需要找出等级为 INFO ，且同时出现 &amp;ldquo;exception&amp;rdquo; 关键词的日志， 一般情况下会将命令写成这样：
+grep &#39;INFO&#39; xxx.log | grep &#39;exception&#39;  但这样关键词多起来，就要写很多管道了，看上去也不直观。
+解决方法 可以 source 这个脚本，将命令写成：
+m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多个关键词了，不过如果还能高亮那就再好不过了：</description>
+    </item>
     
     <item>
       <title>SSH Reverse Tunnel（反向通道）</title>
