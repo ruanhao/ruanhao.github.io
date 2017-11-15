@@ -47,5 +47,19 @@ socat tcp-l:localhost:8080 tcp:localhost:80  使用 SSH 可以对转发的内容
 用法介绍 ssh -N -f -R 8888:localhost:22 &amp;lt;user-of-workstation&amp;gt;@128.</description>
     </item>
     
+    <item>
+      <title>使用 Emacs 作为Python IDE</title>
+      <link>https://ruanhao.github.io/tech/python/ide/</link>
+      <pubDate>Wed, 24 Aug 2016 17:40:15 +0800</pubDate>
+      
+      <guid>https://ruanhao.github.io/tech/python/ide/</guid>
+      <description> 前言 终端编辑器很适合编写脚本类语言，编辑速度快，Ctrl-Z 就能立马调试运行看到效果。 并不是建议大家一定要使用 Emacs 或者 Vim ， 如果是开发大型工程，或者是团队合作，请根据实际情况选择合适的开发工具，比如 PyCharm 。
+不过，如果只是一些随写随用的脚本，何不尝试下 Emacs 呢？
+插件配置 试了下几种常见 Emacs Python 插件，感觉 Elpy 不论是配置还是使用， 都比较简单和轻量化。
+在 ~/.emacs.d/init.el 文件中添加以下配置代码：（需事先安装 use-package）
+(use-package elpy :defer t :init (with-eval-after-load &#39;python (elpy-enable))) (add-hook &#39;elpy-mode-hook (lambda () (define-key elpy-mode-map (kbd &amp;quot;M-.&amp;quot;) &#39;elpy-goto-definition) (define-key elpy-mode-map (kbd &amp;quot;C-x M-.&amp;quot;) &#39;elpy-goto-definition-other-window) (define-key elpy-mode-map (kbd &amp;quot;M-,&amp;quot;) &#39;pop-tag-mark) (define-key elpy-mode-map (kbd &amp;quot;M-RET&amp;quot;) &#39;elpy-company-backend)))  这样就可以了，使用 Meta-. 和 Meta-, 查看函数定义和回退，使用 Meta-Enter 调出代码提示。
+效果 </description>
+    </item>
+    
   </channel>
 </rss>
