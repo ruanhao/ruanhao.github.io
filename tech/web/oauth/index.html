@@ -3,39 +3,36 @@
 <head prefix="og: http://ogp.me/ns#">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <meta property="og:title" content=" 在终端下分析日志文件 &middot;  Hao Ruan" />
+  <meta property="og:title" content=" OAuth 流程 &middot;  Hao Ruan" />
   
   <meta name="theme-color" content="#333" />
  
   <meta property="og:site_name" content="Hao Ruan" />
-  <meta property="og:url" content="https://ruanhao.github.io/tech/linux/highlight/" />
+  <meta property="og:url" content="https://ruanhao.github.io/tech/web/oauth/" />
   
   
   <meta property="og:type" content="article" />
   
   <meta property="og:article:author" content="https://facebook.com/ruanhao1116" />
   
-  <meta property="og:article:published_time" content="2017-08-06T19:59:36&#43;08:00" />
+  <meta property="og:article:published_time" content="2017-11-18T16:49:59&#43;08:00" />
   
   
-  <meta name="og:description" content="常用方法 在桌面环境下，分析日志文件一般使用 TextEdit ，Sublime 等文本编辑工具，当需要查找特定的关键词时，Ctrl-F 或者 Command-F 即可。 但还是有很多内容需要用肉眼过滤，很容易看花眼。
-在 Linux 上进行开发的话，会使用 grep 过滤出感兴趣的内容。比如：
- 过滤某个关键词:
-grep -i &#39;keyword&#39; xxx.log  过滤多个关键词:
-grep &#39;kw1\|kw2&#39; xxx.log  反向过滤:
-grep -v &#39;nokw&#39; xxx.log  将空行过滤掉:
-grep . xxx.log   grep 功能很强，也是我最喜欢的命令之一。尽可能使用高亮模式 grep --color=auto，提升视觉享受。
-问题所在 很多时候分析日志文件时，需要查找某一行同时出现多个关键词， 比如需要找出等级为 INFO ，且同时出现 &ldquo;exception&rdquo; 关键词的日志， 一般情况下会将命令写成这样：
-grep &#39;INFO&#39; xxx.log | grep &#39;exception&#39;  但这样关键词多起来，就要写很多管道了，看上去也不直观。
-解决方法 可以 source 这个脚本，将命令写成：
-m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多个关键词了，不过如果还能高亮那就再好不过了：" />
+  <meta name="og:description" content="前言 OAuth 允许第三方应用程序以用户的身份与服务提供者进行交互， 而在这个过程中应用程序并不需要知道用户在服务提供者那里保存的密码。
+这其中涉及到用户，应用程序与服务提供者之间的多次信息交互。 最近读到一篇深入浅出的文章，很有代入感，遂记录于此。
+OAuth 中的三角关系 OAuth 涉及三个角色：
+ 用户（user） 第三方应用程序（consumer） 服务提供者（service provider）  在下面的例子中，假设第三方应用程序是大众点评手机客户端，服务提供者是微信。 当你在一家环境优雅的餐厅大快朵颐之后，在手机上写下点评，并希望发布到微信朋友圈， 这时候将涉及以下一系列 OAuth 流程：
+OAuth 流程 回顾 服务提供者返回 secret 以用来防止伪造请求，第三方应用程序使用 secret 对每个请求进行签名， 这样服务提供者就可以验证请求的合法性。
+在 Step 3 中，对于第三方应用程序重定向的网站，用户必须检查其正确性， 因为如果第三方应用程序搞一个和服务提供者长得一样的网站，而用户又输入了用户名和密码，那就完蛋了。
+在 Step 4 中，服务提供者将 request token 标记为 good-to-go ， 这样，当第三方应用程序后续请求 access token 时，就会被允许， 当然前提是这个请求是合法的（被正确的 secret 签名）。
+参考 Introduction to OAuth (in Plain English)" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:url" content="https://ruanhao.github.io/tech/linux/highlight/" />
+  <meta name="twitter:url" content="https://ruanhao.github.io/tech/web/oauth/" />
   <meta name="twitter:site" content="@" />
   <meta name="twitter:creator" content="@" />
 
   <title>
-     在终端下分析日志文件 &middot;  Hao Ruan
+     OAuth 流程 &middot;  Hao Ruan
   </title>
 
   <link rel="stylesheet" href="https://ruanhao.github.io/css/bootstrap.min.css" />
@@ -71,12 +68,12 @@ m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多�
 
 <article>
   <header>
-    <h1 class="text-primary">在终端下分析日志文件</h1>
+    <h1 class="text-primary">OAuth 流程</h1>
     <div class="post-meta clearfix">
       <div class="post-date pull-left">
         Posted on
-        <time datetime="2017-08-06T19:59:36&#43;08:00">
-          Aug 6, 2017
+        <time datetime="2017-11-18T16:49:59&#43;08:00">
+          Nov 18, 2017
         </time>
       </div>
       <div class="pull-right">
@@ -87,65 +84,47 @@ m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多�
   <section>
     
 
-<h2 id="常用方法">常用方法</h2>
+<h2 id="前言">前言</h2>
 
-<p>在桌面环境下，分析日志文件一般使用 TextEdit ，Sublime 等文本编辑工具，当需要查找特定的关键词时，Ctrl-F 或者 Command-F 即可。
-但还是有很多内容需要用肉眼过滤，很容易看花眼。</p>
+<p>OAuth 允许第三方应用程序以用户的身份与服务提供者进行交互，
+而在这个过程中应用程序并不需要知道用户在服务提供者那里保存的密码。</p>
 
-<p>在 Linux 上进行开发的话，会使用 grep 过滤出感兴趣的内容。比如：</p>
+<p>这其中涉及到用户，应用程序与服务提供者之间的多次信息交互。
+最近读到一篇深入浅出的文章，很有代入感，遂记录于此。</p>
+
+<h2 id="oauth-中的三角关系">OAuth 中的三角关系</h2>
+
+<p>OAuth 涉及三个角色：</p>
 
 <ul>
-<li><p>过滤某个关键词:</p>
-
-<pre><code class="language-sh">grep -i 'keyword' xxx.log
-</code></pre></li>
-
-<li><p>过滤多个关键词:</p>
-
-<pre><code class="language-sh">grep 'kw1\|kw2' xxx.log
-</code></pre></li>
-
-<li><p>反向过滤:</p>
-
-<pre><code class="language-sh">grep -v 'nokw' xxx.log
-</code></pre></li>
-
-<li><p>将空行过滤掉:</p>
-
-<pre><code class="language-sh">grep . xxx.log
-</code></pre></li>
+<li>用户（user）</li>
+<li>第三方应用程序（consumer）</li>
+<li>服务提供者（service provider）</li>
 </ul>
 
-<p>grep 功能很强，也是我最喜欢的命令之一。尽可能使用高亮模式 <code>grep --color=auto</code>，提升视觉享受。</p>
+<p>在下面的例子中，假设第三方应用程序是大众点评手机客户端，服务提供者是微信。
+当你在一家环境优雅的餐厅大快朵颐之后，在手机上写下点评，并希望发布到微信朋友圈，
+这时候将涉及以下一系列 OAuth 流程：</p>
 
-<h2 id="问题所在">问题所在</h2>
+<h2 id="oauth-流程">OAuth 流程</h2>
 
-<p>很多时候分析日志文件时，需要查找某一行同时出现多个关键词，
-比如需要找出等级为 INFO ，且同时出现 &ldquo;exception&rdquo; 关键词的日志，
-一般情况下会将命令写成这样：</p>
+<p><img src="/images/tech/oauth-process.png" alt="" /></p>
 
-<pre><code class="language-sh">grep 'INFO' xxx.log | grep 'exception'
-</code></pre>
+<h2 id="回顾">回顾</h2>
 
-<p>但这样关键词多起来，就要写很多管道了，看上去也不直观。</p>
+<p>服务提供者返回 secret 以用来防止伪造请求，第三方应用程序使用 secret 对每个请求进行签名，
+这样服务提供者就可以验证请求的合法性。</p>
 
-<h2 id="解决方法">解决方法</h2>
+<p>在 Step 3 中，对于第三方应用程序重定向的网站，用户必须检查其正确性，
+因为如果第三方应用程序搞一个和服务提供者长得一样的网站，而用户又输入了用户名和密码，那就完蛋了。</p>
 
-<p>可以 source <a href="https://gist.github.com/ruanhao/e94d426f715dcc22e1405b8462685354">这个脚本</a>，将命令写成：</p>
+<p>在 Step 4 中，服务提供者将 request token 标记为 <code>good-to-go</code> ，
+这样，当第三方应用程序后续请求 access token 时，就会被允许，
+当然前提是这个请求是合法的（被正确的 secret 签名）。</p>
 
-<pre><code class="language-sh">m -p 'INFO' -p 'exception' xxx.log
-</code></pre>
+<h2 id="参考">参考</h2>
 
-<p>这样就能同时搜索多个关键词了，不过如果还能高亮那就再好不过了：</p>
-
-<pre><code class="language-sh">m -p 'INFO' -p 'exception' xxx.log | h 'INFO' 'exception'
-</code></pre>
-
-<p>效果如下：</p>
-
-<p><img src="/images/tech/browse-log-under-term.png" alt="" /></p>
-
-<p>其实在终端下分析日志还是很开心的。</p>
+<p><a href="https://blog.varonis.com/introduction-to-oauth/">Introduction to OAuth (in Plain English)</a></p>
 
   </section>
   <footer>
@@ -180,10 +159,10 @@ m -p &#39;INFO&#39; -p &#39;exception&#39; xxx.log  这样就能同时搜索多�
     </section>
     <ul class="pager">
       
-      <li class="previous"><a href="https://ruanhao.github.io/tech/linux/ssh/"><span aria-hidden="true">&larr;</span> Older</a></li>
+      <li class="previous"><a href="https://ruanhao.github.io/tech/linux/highlight/"><span aria-hidden="true">&larr;</span> Older</a></li>
       
       
-      <li class="next"><a href="https://ruanhao.github.io/tech/web/oauth/">Newer <span aria-hidden="true">&rarr;</span></a></li>
+      <li class="next disabled"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
       
     </ul>
   </footer>
