@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&amp;copy; Copyright Hao Ruan</copyright>
-    <lastBuildDate>Sat, 18 Nov 2017 16:49:59 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 19 Nov 2017 13:13:12 +0800</lastBuildDate>
     
 	<atom:link href="https://ruanhao.github.io/tech/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Erlang Netconf Client</title>
+      <link>https://ruanhao.github.io/tech/erlang/simple-netconf-client/</link>
+      <pubDate>Sun, 19 Nov 2017 13:13:12 +0800</pubDate>
+      
+      <guid>https://ruanhao.github.io/tech/erlang/simple-netconf-client/</guid>
+      <description>前言 公司的项目通过 Netconf 协议从网络设备获取配置，管理，运行参数等信息。 使用 Opendaylight 这个平台实现基于 Netconf 的交互操作。
+在 SDN 领域，ODL 可以算得上是集大成者，也提供了一些很棒的插件，比如实现 YANG 与 Java 对象之间的映射绑定。 由于当初对 Netconf 协议了解不多，而 ODL 正好在这一领域提供了一揽子解决方案，为了快速开展项目，就选择了它。 但其实在整个项目中 ODL 只是充当了 Netconf client 的角色，很多模块和内置插件虽然启动了，但是完全没有用到， 考虑到 Docker 和 AWS 上的部署与运维，使用 ODL 的成本就显得很高，因为整个 ODL 体积太庞大，而且需要占用大量内存。
+我打算寻找一种简单的 Netconf client 实现方案替代 ODL 。
+替代方案 其实相比实现 Netconf server ，client 端相对简单一些，只需要实现 Netconf 协议的编解码和消息处理逻辑。
+在网上搜索一番之后，发现了 Erlang Common Test 这个框架， 其中包含一个测试套件 ct_netconfc 。
+看了一下帮助文档，发现 ct_netconfc 实现了 RFC 4741 ，完全可以为我所用。 而且实现了 RFC 4742 ，即基于 SSH 传输协议。 我们的项目是基于 TCP 的，只需要将传输协议改造下即可。</description>
+    </item>
     
     <item>
       <title>OAuth 流程</title>
